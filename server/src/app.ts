@@ -47,7 +47,7 @@ app.post("/test-redis", async (req,res) => {
 
   })
 
-app.use("/register", reisgterRouter );
+app.use("/account", reisgterRouter );
 app.use("/storage", storageRouter);
 
 app.listen(PORT, () => {

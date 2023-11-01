@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import axios from "axios"
 import * as redis from "redis"
 import argon2 from "argon2"
+import { bool } from "aws-sdk/clients/signer";
 
 export const hashPassword = async (password: string) => {
 
@@ -19,8 +20,12 @@ export const hashPassword = async (password: string) => {
         return hashedPassword;
 
 };
-export const verifyPassword = async (password: string) => {
-    
+export const verifyPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+    const result = await argon2.verify(hashedPassword, password);
+    if(!result){
+        return false
+    }
+    return true
 }
 
 export const setRedis = async (key: string, value: string, redisClient: any) => {
@@ -103,7 +108,6 @@ export const setRedis = async (key: string, value: string, redisClient: any) => 
         console.log(`Successfully uploaded data to ${bucketName}${key}`);        
 
     }
-    
 
 
 
