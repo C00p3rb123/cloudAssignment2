@@ -4,16 +4,27 @@ import AWS from "aws-sdk"
 import dotenv from "dotenv"
 import axios from "axios"
 import * as redis from "redis"
+import argon2 from "argon2"
 
 export const hashPassword = async (password: string) => {
 
-    const salt = await bcrypt.genSalt(15);
-    return await bcrypt.hash(password, salt);
+        const startTime = new Date().getTime();
+        const hashedPassword = await argon2.hash(password, {
+            timeCost: 18, 
+            memoryCost: 500000, 
+            })
+
+        const endTime = new Date().getTime();
+        console.log(`${endTime - startTime}`);
+        return hashedPassword;
 
 };
+export const verifyPassword = async (password: string) => {
+    
+}
 
 export const setRedis = async (key: string, value: string, redisClient: any) => {
-    const result = await getRedis(key)
+    const result = await getRedis(key, redisClient)
     
     try {
         await redisClient.connect();
