@@ -2,6 +2,7 @@ import express from "express";
 import reisgterRouter from "../src/routes/account"
 import storageRouter from "../src/routes/storage"
 import { setRedis, getRedis, gets3, setS3 } from "./utils/utils";
+import redis from "redis"
 import dotenv from "dotenv"
 const PORT = 3000;
 
@@ -17,6 +18,7 @@ app.get("/hello", (req, res) => {
 
 app.post("/test-redis", async (req,res) => {
     try{
+        const redisClient = redis.createClient();
         console.log(process.env.AWS_ACCESS_KEY_ID)
         const {username, password} = req.body;
         const user = await getRedis(username)

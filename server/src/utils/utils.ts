@@ -12,9 +12,9 @@ export const hashPassword = async (password: string) => {
 
 };
 
-export const setRedis = async (key: string, value: string) => {
+export const setRedis = async (key: string, value: string, redisClient: any) => {
     const result = await getRedis(key)
-    const redisClient = redis.createClient();
+    
     try {
         await redisClient.connect();
     } catch (err) {
@@ -31,9 +31,8 @@ export const setRedis = async (key: string, value: string) => {
         JSON.stringify({ source: "Redis Cache", value })
     );}}
 
- export const getRedis = async (key: string): Promise<string | undefined> => {
+ export const getRedis = async (key: string, redisClient: any): Promise<string | undefined> => {
         
-        const redisClient = redis.createClient();
         try {
             await redisClient.connect();
         } catch (err) {
