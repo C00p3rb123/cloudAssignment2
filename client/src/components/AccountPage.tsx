@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Modal } from "./Modal";
+import { ShowAccountModal } from "./ShowAccountModal";
+import { AddAccountModal } from "./AddAccountModal";
 
 const AccountPage: React.FC = () => {
   const [accounts, setAccounts] = useState<string[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<string>();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState<boolean>(false);
+  const [isAddAccountModalOpen, setIsAddAccountModalOpen] =
+    useState<boolean>(false);
   const fetchAccounts = async () => {
     const response = await axios.get("http://localhost:4000/storage/list");
     setAccounts(response.data);
@@ -15,19 +18,29 @@ const AccountPage: React.FC = () => {
     fetchAccounts();
   }, []);
 
-  const handleOnClick = (account: string) => {
+  const handleClickAccount = (account: string) => {
     setSelectedAccount(account);
-    setIsModalOpen(true);
+    setIsAccountModalOpen(true);
   };
 
+  const handleClickAdd = () => {
+    setIsAddAccountModalOpen(true);
+  };
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
+      <ShowAccountModal
+        isOpen={isAccountModalOpen}
         onClose={() => {
-          setIsModalOpen(false);
+          setIsAccountModalOpen(false);
         }}
         serviceName={selectedAccount}
+      />
+      <AddAccountModal
+        isOpen={isAddAccountModalOpen}
+        onClose={() => {
+          setIsAddAccountModalOpen(false);
+          fetchAccounts();
+        }}
       />
       <div className="bg-gray-100 min-h-screen">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -40,8 +53,8 @@ const AccountPage: React.FC = () => {
                   className="bg-white shadow overflow-hidden sm:rounded-md mb-4"
                 >
                   <div
-                    className="px-4 py-5 sm:px-6"
-                    onClick={() => handleOnClick(account)}
+                    className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
+                    onClick={() => handleClickAccount(account)}
                   >
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
                       {account}
@@ -49,6 +62,16 @@ const AccountPage: React.FC = () => {
                   </div>
                 </li>
               ))}
+              <li className="bg-white shadow overflow-hidden sm:rounded-md mb-4">
+                <div
+                  className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
+                  onClick={() => handleClickAdd()}
+                >
+                  <h3 className="text-lg leading-6 font-medium text-gray-400">
+                    ➕ Add new account
+                  </h3>
+                </div>
+              </li>
             </ul>
           </div>
         </div>

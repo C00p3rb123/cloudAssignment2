@@ -7,7 +7,7 @@ type Props = {
   serviceName: string | undefined;
 };
 
-export const Modal = ({ isOpen, onClose, serviceName }: Props) => {
+export const ShowAccountModal = ({ isOpen, onClose, serviceName }: Props) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
