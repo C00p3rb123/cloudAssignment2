@@ -1,6 +1,6 @@
 import bcrypt, { hash } from "bcrypt";
 import express, { Request, Response } from "express";
-import {gets3, hashPassword, setS3, verifyPassword} from "../utils/utils"
+import {getS3, hashPassword, setS3, verifyPassword} from "../utils/utils"
 import { createToken } from "../utils/jwt";
 
 
@@ -14,7 +14,7 @@ router.post("/create-account", async (req: Request, res: Response) => {
 
     try{
         const hashedPassword = await hashPassword(password);
-        const isEmail = await gets3(email);
+        const isEmail = await getS3(email);
         if(isEmail){
             res.status(400);
             res.send({
@@ -23,15 +23,21 @@ router.post("/create-account", async (req: Request, res: Response) => {
             })
             return
         }
-        await setS3(email, hashedPassword)
+        await setS3(email, {
+            masterPassword: hashedPassword,
+            services: []
+        })
         res.status(200);
         res.send({
-            message: "Hello There",
-            password: hashedPassword
+            message: `Successfully created account`,
         })
     }catch(err: any){
         console.log(`${err.message}\nUnable to hash password`);
         res.status(400).json({
+            error: err,
+            Message: err.message
+        })
+        console.log({
             error: err,
             Message: err.message
         })
@@ -42,7 +48,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const {email, password} = req.body;
   
     try{
-        const user = await gets3(email);
+        const user = await getS3(email);
         if(!user){
             res.status(400);
             res.send({
@@ -51,7 +57,7 @@ router.post("/login", async (req: Request, res: Response) => {
             })
             return
         }
-        const verified = await verifyPassword(password, user.value);
+        const verified = await verifyPassword(password, user.value.masterPassword);
         if(!verified){
             res.status(400);
             res.send({
