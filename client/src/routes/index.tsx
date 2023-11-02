@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthRoute } from "./AuthRoute";
 import { LoginPage } from "../components/LoginPage";
+import { LogoutPage } from "../components/LogoutPage";
 
 export const Routes = () => {
   const publicRoutes = [
@@ -25,7 +26,7 @@ export const Routes = () => {
         },
         {
           path: "/logout",
-          element: <div>Logout</div>,
+          element: <LogoutPage />,
         },
       ],
     },
