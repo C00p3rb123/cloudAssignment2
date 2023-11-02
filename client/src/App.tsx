@@ -1,11 +1,15 @@
 import "./index.css";
-import { useState } from "react";
-import { MainPage } from "./components/MainPage";
+import { AuthProvider } from "./provider/AuthProvider";
+import { Routes } from "./routes";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/";
 
 const App = () => {
-  return <MainPage />;
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
 };
 
 export default App;

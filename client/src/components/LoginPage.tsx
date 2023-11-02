@@ -1,9 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../provider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-export const MainPage = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { updateToken } = useAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -20,7 +24,9 @@ export const MainPage = () => {
         email,
         password,
       });
-      console.log(response.data);
+      const { token } = response.data;
+      updateToken(token);
+      navigate("/service", { replace: true });
     } catch (error) {
       console.error(error);
     }
