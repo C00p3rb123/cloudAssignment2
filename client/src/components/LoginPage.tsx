@@ -26,7 +26,7 @@ export const LoginPage = () => {
       });
       const { token } = response.data;
       updateToken(token);
-      navigate("/service", { replace: true });
+      navigate("/account", { replace: true });
     } catch (error) {
       console.error(error);
     }

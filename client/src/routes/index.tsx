@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthRoute } from "./AuthRoute";
 import { LoginPage } from "../components/LoginPage";
 import { LogoutPage } from "../components/LogoutPage";
+import AccountPage from "../components/AccountPage";
 
 export const Routes = () => {
   const publicRoutes = [
@@ -21,8 +22,8 @@ export const Routes = () => {
       element: <AuthRoute />,
       children: [
         {
-          path: "/service",
-          element: <div>Service Page</div>,
+          path: "/account",
+          element: <AccountPage />,
         },
         {
           path: "/logout",

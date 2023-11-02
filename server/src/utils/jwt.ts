@@ -1,8 +1,18 @@
-import jwt from "jsonwebtoken"
-import dotenv from "dotenv"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-export const createToken = (user: Object) => {
-    const secretKey = process.env.SECRET_KEY 
-    const token = jwt.sign(user, secretKey!, { expiresIn: '1h' });
-    return token;
-}
+const secretKey = process.env.SECRET_KEY || "secret";
+
+export type UserInfo = {
+  email: string;
+};
+
+export const createToken = (payload: UserInfo) => {
+  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  return token;
+};
+
+export const decodeToken = (token: string) => {
+  const decoded = jwt.verify(token, secretKey);
+  return decoded as UserInfo;
+};
