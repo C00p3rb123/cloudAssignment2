@@ -1,7 +1,8 @@
 import bcrypt, { hash } from "bcrypt";
 import express, { Request, Response } from "express";
-import {getS3, hashPassword, setS3, verifyPassword} from "../utils/utils"
+import {getS3,  setS3} from "../utils/utils"
 import { createToken } from "../utils/jwt";
+import {hashPassword, verifyPassword} from "../utils/security"
 
 
 const router = express.Router();

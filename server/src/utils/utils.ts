@@ -6,36 +6,8 @@ import * as redis from "redis"
 import argon2 from "argon2"
 import { ServiceStored } from "../types/types";
 
-export const hashPassword = async (password: string) => {
-
-    const startTime = new Date().getTime();
-    const hashedPassword = await argon2.hash(password, {
-        timeCost: 18,
-        memoryCost: 500000,
-    })
-
-    const endTime = new Date().getTime();
-    console.log(`${endTime - startTime}`);
-    return hashedPassword;
-
-};
-export const verifyPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
-    const result = await argon2.verify(hashedPassword, password);
-    if (!result) {
-        return false
-    }
-    return true
-}
-
 export const setRedis = async (key: string, value: ServiceStored[], redisClient: any) => {
-    const result = await getRedis(key, redisClient);
-    const userServices: ServiceStored[] = result.value;
-    const platform = value[value.length - 1].platform
-    userServices.forEach((userService) => {
-        if (userService.platform === platform) {
-            throw new Error('Service already stored')
-        }
-    }); 
+    
     redisClient.setEx(
         key,
         3600,
@@ -101,10 +73,11 @@ export const setS3 = async (key: string, value: any) => {
 
 }
 
-export const getData = async (key: string, redisClient: any) => {
+export const getData = async (key: string, redisClient: any): Promise<ServiceStored[]> => {
     const redisData = await getRedis(key, redisClient);
     if(!redisData){
         const s3Data = await getS3(key);
+        await setRedis(key, s3Data.value.services, redisClient)
         return s3Data.value.services
     }
     return redisData.value
