@@ -54,9 +54,7 @@ export const LoginPage = () => {
   return (
     <div className=" bg-[#000e23] flex flex-col items-center justify-center h-screen">
       <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-4">
-          Welcome to the Password Manager
-        </h1>
+        <h1 className="text-3xl font-bold mb-4">Master Password Login</h1>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <label className="text-lg font-medium">
             Email:

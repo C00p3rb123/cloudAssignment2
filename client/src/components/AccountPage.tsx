@@ -71,7 +71,7 @@ export const AccountPage: React.FC = () => {
                     onClick={() => handleClickAdd()}
                   >
                     <h3 className="text-lg leading-6 font-medium text-gray-400">
-                      ➕ Add new account
+                      ➕<span className="ml-4">Add new account</span>
                     </h3>
                   </div>
                 </li>

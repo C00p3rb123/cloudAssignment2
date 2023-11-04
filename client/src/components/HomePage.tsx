@@ -6,10 +6,10 @@ export const HomePage = () => {
     <div className="bg-[#000e23] text-white min-h-screen flex flex-col justify-center items-center">
       <img src={logo} alt="Password Manager Logo" className="h-32 mb-8" />
       <h1 className="text-4xl font-bold mb-4 text-blue-500">
-        Welcome to Password Manager
+        Welcome to CipherGuard
       </h1>
       <p className="text-lg text-center mb-8">
-        Securely store and manage your passwords with ease.
+        Manage your passwords with ease.
       </p>
       <NavLink to="/login">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
