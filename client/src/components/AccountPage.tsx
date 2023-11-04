@@ -4,7 +4,7 @@ import { ShowAccountModal } from "./ShowAccountModal";
 import { AddAccountModal } from "./AddAccountModal";
 import { API_URL } from "../config";
 
-const AccountPage: React.FC = () => {
+export const AccountPage: React.FC = () => {
   const [accounts, setAccounts] = useState<string[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<string>();
   const [isAccountModalOpen, setIsAccountModalOpen] = useState<boolean>(false);
@@ -81,5 +81,3 @@ const AccountPage: React.FC = () => {
     </>
   );
 };
-
-export default AccountPage;
