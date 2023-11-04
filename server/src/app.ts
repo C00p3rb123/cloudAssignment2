@@ -19,7 +19,6 @@ app.get("/hello", (req, res) => {
   return res.send("hi");
 });
 
-
 app.use("/account", reisgterRouter);
 app.use("/storage", storageRouter);
 
