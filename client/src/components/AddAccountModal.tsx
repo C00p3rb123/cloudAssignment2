@@ -1,5 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
+import axios, { AxiosError } from "axios";
 import { Fragment } from "react";
+import { API_URL } from "../config";
 
 type Props = {
   isOpen: boolean;
@@ -7,13 +9,26 @@ type Props = {
 };
 
 export const AddAccountModal = ({ isOpen, onClose }: Props) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const service = formData.get("service") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    console.log(service, email, password);
+    try {
+      const response = await axios.post(`${API_URL}/storage/add-service`, {
+        platform: service,
+        username: email,
+        password,
+      });
+      alert(response.data.message);
+      onClose();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert(error.message);
+      }
+      console.error(error);
+    }
   };
 
   return (

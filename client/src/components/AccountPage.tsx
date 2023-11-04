@@ -12,6 +12,7 @@ const AccountPage: React.FC = () => {
     useState<boolean>(false);
   const fetchAccounts = async () => {
     const response = await axios.get(`${API_URL}/storage/list`);
+    console.log({ response });
     setAccounts(response.data);
   };
 
@@ -48,7 +49,7 @@ const AccountPage: React.FC = () => {
           <div className="px-4 py-6 sm:px-0">
             <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
             <ul className="mt-4">
-              {accounts.map((account) => (
+              {accounts?.map((account) => (
                 <li
                   key={account}
                   className="bg-white shadow overflow-hidden sm:rounded-md mb-4"

@@ -8,7 +8,7 @@ export const Routes = () => {
   const publicRoutes = [
     {
       path: "/",
-      element: <div>Home Page</div>,
+      element: <LoginPage />,
     },
     {
       path: "/login",
