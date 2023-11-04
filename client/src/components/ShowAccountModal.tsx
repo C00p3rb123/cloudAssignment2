@@ -1,5 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import axios from "axios";
+import { Fragment, useEffect, useState } from "react";
+import { API_URL } from "../config";
 
 type Props = {
   isOpen: boolean;
@@ -8,6 +10,19 @@ type Props = {
 };
 
 export const ShowAccountModal = ({ isOpen, onClose, serviceName }: Props) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  useEffect(() => {
+    if (!serviceName) return;
+    setEmail("");
+    setPassword("");
+    const fetchAccount = async () => {
+      const response = await axios.get(`${API_URL}/storage/${serviceName}`);
+      setEmail(response.data.username);
+      setPassword(response.data.password);
+    };
+    fetchAccount();
+  }, [serviceName]);
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -44,8 +59,8 @@ export const ShowAccountModal = ({ isOpen, onClose, serviceName }: Props) => {
                       >
                         {serviceName}
                       </Dialog.Title>
-                      <div className="mt-2">Email : {"<Email>"}</div>
-                      <div className="mt-2">Password : {"<Password>"}</div>
+                      <div className="mt-2">Email : {email}</div>
+                      <div className="mt-2">Password : {password}</div>
                     </div>
                   </div>
                 </div>
