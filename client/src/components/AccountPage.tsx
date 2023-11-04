@@ -53,7 +53,7 @@ export const AccountPage: React.FC = () => {
                 {accounts?.map((account) => (
                   <li
                     key={account}
-                    className="bg-white shadow overflow-hidden sm:rounded-md mb-4"
+                    className="bg-white shadow overflow-hidden rounded-md mb-4"
                   >
                     <div
                       className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
@@ -65,7 +65,7 @@ export const AccountPage: React.FC = () => {
                     </div>
                   </li>
                 ))}
-                <li className="bg-white shadow overflow-hidden sm:rounded-md mb-4">
+                <li className="bg-white shadow overflow-hidden rounded-md mb-4">
                   <div
                     className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
                     onClick={() => handleClickAdd()}
