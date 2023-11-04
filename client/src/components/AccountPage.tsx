@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { ShowAccountModal } from "./ShowAccountModal";
 import { AddAccountModal } from "./AddAccountModal";
+import { API_URL } from "../config";
 
 const AccountPage: React.FC = () => {
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -10,7 +11,7 @@ const AccountPage: React.FC = () => {
   const [isAddAccountModalOpen, setIsAddAccountModalOpen] =
     useState<boolean>(false);
   const fetchAccounts = async () => {
-    const response = await axios.get("http://localhost:4000/storage/list");
+    const response = await axios.get(`${API_URL}/storage/list`);
     setAccounts(response.data);
   };
 
