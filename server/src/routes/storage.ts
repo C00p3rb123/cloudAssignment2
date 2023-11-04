@@ -1,19 +1,13 @@
 import express from "express";
-import { getS3, setS3, setRedis, getData } from "../utils/utils";
 import { ServiceRequest, ServiceStored } from "../types/types";
 import { decodeToken } from "../utils/jwt";
 import { encryptPassword, decryptPassword } from "../utils/security";
-import * as redis from "redis";
+import { getRedis, setRedis } from "../utils/redisClient";
+import { getS3, setS3 } from "../utils/s3Client";
 
 const router = express.Router();
 
 router.use(express.json());
-const redisOptions = {
-  socket: {
-    host: "group41redis.km2jzi.clustercfg.apse2.cache.amazonaws.com",
-    port: 6379,
-  },
-};
 
 router.use(async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -30,23 +24,19 @@ router.use(async (req, res, next) => {
 });
 router.get("/list", async (req, res) => {
   try {
-    const redisClient = redis.createClient(redisOptions);
-    await redisClient.connect();
     const userEmail = req["user"]?.email;
     console.log(`${userEmail} request list-services`);
-    const data = await getData(userEmail, redisClient);
-    if (!data) {
-      res.status(400).json({
-        error: true,
-        Message: "No services stored",
-      });
+    const key = `user:${userEmail}:services`;
+    const cachedServiceList = await getRedis(key);
+    if (cachedServiceList) {
+      res.status(200).json(cachedServiceList);
       return;
     }
-    const list = data.map((service) => {
-      return service.platform;
-    });
-    await redisClient.quit();
-    res.status(200).json(list);
+    const userMasterFile = await getS3(userEmail);
+    const credentials: ServiceStored[] = userMasterFile.value.services;
+    const serviceList = credentials.map((c) => c.platform);
+    await setRedis(key, serviceList);
+    res.status(200).json(serviceList);
   } catch (err) {
     console.log(`${err.message}`);
     res.status(400).json({
@@ -58,12 +48,17 @@ router.get("/list", async (req, res) => {
 
 router.get("/:platform", async (req, res) => {
   try {
-    const redisClient = redis.createClient(redisOptions);
-    await redisClient.connect();
     const platform = req.params.platform;
     const userEmail = req["user"]?.email;
-    const data = await getData(userEmail, redisClient);
-    const requestedPlatform: ServiceStored[] = data.filter(
+    const key = `user:${userEmail}:services:${platform}`;
+    const cachedCredential = await getRedis(key);
+    if (cachedCredential) {
+      res.status(200).json(cachedCredential);
+      return;
+    }
+    const userMasterFile = await getS3(userEmail);
+    const credentials: ServiceStored[] = userMasterFile.value.services;
+    const requestedPlatform: ServiceStored[] = credentials.filter(
       (service) => service.platform === platform
     );
     if (requestedPlatform.length === 0) {
@@ -77,7 +72,7 @@ router.get("/:platform", async (req, res) => {
       ...requestedPlatform[0],
       password: decryptPassword(requestedPlatform[0].password),
     };
-    await redisClient.quit();
+    await setRedis(key, returnedPlatform);
     res.status(200).json(returnedPlatform);
   } catch (err) {
     console.log(`${err.message}`);
@@ -106,13 +101,9 @@ router.post("/add-service", async (req, res) => {
       password: encryptedPassword,
     });
     user.value.services = userServices;
-    const redisClient = redis.createClient(redisOptions);
-    await redisClient.connect();
-    await setRedis(userEmail, userServices, redisClient);
     await setS3(userEmail, user.value);
     console.log(`${userEmail} request add-service`);
     console.log(service);
-    await redisClient.quit();
     res.status(200).json({
       Message: `Successfully stored service: ${service.platform} with user: ${service.username}`,
     });

@@ -4,6 +4,7 @@ import storageRouter from "../src/routes/storage";
 import dotenv from "dotenv";
 import logger from "morgan";
 import cors from "cors";
+import { initClient } from "./utils/redisClient";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/hello", (req, res) => {
 app.use("/account", reisgterRouter);
 app.use("/storage", storageRouter);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await initClient();
   console.log(`Listening on port ${PORT}`);
 });
