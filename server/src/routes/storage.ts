@@ -9,6 +9,12 @@ import * as redis from 'redis';
 const router = express.Router();
 
 router.use(express.json());
+const redisOptions = {
+  socket: {
+    host: "127.0.0.1",
+    port: 6379
+  }
+};
 
 router.use( async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -23,11 +29,10 @@ router.use( async (req, res, next) => {
     return res.sendStatus(403);
   }
 });
-
 router.get("/list", async (req, res) => {
 
   try{
-    const redisClient = redis.createClient();
+  const redisClient = redis.createClient(redisOptions);
   await redisClient.connect();
   const userEmail = req["user"]?.email;
   console.log(`${userEmail} request list-services`);
@@ -58,7 +63,7 @@ router.get("/list", async (req, res) => {
 
 router.get("/:platform", async (req, res) => {
   try{
-    const redisClient = redis.createClient();
+    const redisClient = redis.createClient(redisOptions);
     await redisClient.connect();  
     const platform = req.params.platform;
     const userEmail = req["user"]?.email;
@@ -108,7 +113,7 @@ router.post("/add-service", async (req, res) => {
       password: encryptedPassword
     })
     user.value.services = userServices;
-    const redisClient = redis.createClient();
+    const redisClient = redis.createClient(redisOptions);
     await redisClient.connect();
     await setRedis(userEmail, userServices, redisClient );
     await setS3(userEmail, user.value);
