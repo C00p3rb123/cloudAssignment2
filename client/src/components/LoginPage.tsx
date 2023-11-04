@@ -52,7 +52,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className=" bg-[#000e23] flex flex-col items-center justify-center h-screen">
       <div className="bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-4">
           Welcome to the Password Manager
