@@ -104,6 +104,11 @@ router.post("/add-service", async (req, res) => {
     await setS3(userEmail, user.value);
     console.log(`${userEmail} request add-service`);
     console.log(service);
+    const key = `user:${userEmail}:services`;
+    await setRedis(
+      key,
+      userServices.map((s) => s.platform)
+    );
     res.status(200).json({
       Message: `Successfully stored service: ${service.platform} with user: ${service.username}`,
     });

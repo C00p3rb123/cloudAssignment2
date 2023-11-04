@@ -13,7 +13,11 @@ export const AccountPage: React.FC = () => {
   const fetchAccounts = async () => {
     const response = await axios.get(`${API_URL}/storage/list`);
     console.log({ response });
-    setAccounts(response.data);
+    const accounts = response?.data?.value;
+    if (!accounts) {
+      return;
+    }
+    setAccounts(accounts);
   };
 
   useEffect(() => {
