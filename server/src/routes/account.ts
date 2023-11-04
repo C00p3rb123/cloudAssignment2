@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { getS3, setS3 } from "../utils/utils";
 import { createToken } from "../utils/jwt";
 import { hashPassword, verifyPassword } from "../utils/security";
 import { getRedis, setRedis } from "../utils/redisClient";
+import { getS3, setS3 } from "../utils/s3Client";
 
 const router = express.Router();
 
