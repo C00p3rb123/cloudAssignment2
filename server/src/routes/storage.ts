@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(express.json());
 const redisOptions = {
   socket: {
-    host: "127.0.0.1",
+    host: "group41redis.km2jzi.clustercfg.apse2.cache.amazonaws.com",
     port: 6379
   }
 };
