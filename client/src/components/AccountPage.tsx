@@ -45,9 +45,9 @@ export const AccountPage: React.FC = () => {
         }}
       />
       <div className="bg-[#000e23] min-h-screen flex justify-center items-center">
-        <div className="bg-gray-100 rounded-2xl flex-1 max-w-3xl">
-          <div className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
-            <div className="px-4 py-6 sm:px-0">
+        <div className="bg-gray-100 rounded-2xl flex-1 max-w-xl">
+          <div className="mx-auto py-6 px-10">
+            <div className="px-4 py-6">
               <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
               <ul className="mt-4">
                 {accounts?.map((account) => (
