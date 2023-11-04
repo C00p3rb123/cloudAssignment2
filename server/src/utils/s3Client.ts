@@ -13,16 +13,12 @@ export const getS3 = async (key: string) => {
   const params = { Bucket: bucketName!, Key: s3Key };
   try {
     const s3Result = await s3.getObject(params).promise();
-
-    // Serve from S3
     const s3JSON = JSON.parse(s3Result.Body?.toString()!);
     return s3JSON;
   } catch (err: any) {
     if (err.statusCode === 404) {
-      // Serve from Wikipedia API and store in S3
       console.error(`Value not found`);
     } else {
-      // Something else went wrong when accessing S3
       console.error(err.message);
     }
   }
