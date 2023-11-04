@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import {  getS3, setS3, setRedis, getData  } from "../utils/utils";
 import {ServiceRequest, ServiceStored } from "../types/types";
 import { UserInfo, decodeToken } from "../utils/jwt";
-import { set } from "mongoose";
 import { encryptPassword, decryptPassword } from "../utils/security";
 import * as redis from 'redis';
 
