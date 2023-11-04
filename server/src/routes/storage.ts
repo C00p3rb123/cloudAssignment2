@@ -25,6 +25,7 @@ router.use( async (req, res, next) => {
 });
 
 router.get("/list", async (req, res) => {
+
   try{
     const redisClient = redis.createClient();
   await redisClient.connect();
@@ -42,9 +43,9 @@ router.get("/list", async (req, res) => {
     return service.platform;
   })  
   await redisClient.quit();
-  res.status(200).json({
-    data: list
-  });
+  res.status(200).json(
+    list
+  );
   } catch(err){
     console.log(`${err.message}`);
     res.status(400).json({
@@ -76,9 +77,9 @@ router.get("/:platform", async (req, res) => {
       password: decryptPassword(requestedPlatform[0].password)
     }   
     await redisClient.quit();
-    res.status(200).json({
-      data: returnedPlatform
-    })
+    res.status(200).json(
+      returnedPlatform
+    )
   }catch(err){
     console.log(`${err.message}`);
     res.status(400).json({
@@ -92,7 +93,7 @@ router.get("/:platform", async (req, res) => {
 router.post("/add-service", async (req, res) => {
   try{  
     const userEmail = req["user"]?.email;
-    const service: ServiceRequest = req.body.data;
+    const service: ServiceRequest = req.body;
     const user = await getS3(userEmail);
     const userServices: ServiceStored[] = user.value.services;
     userServices.forEach((userService) => {
