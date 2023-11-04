@@ -1,14 +1,13 @@
-FROM node:18-alpine3.17
+FROM node:18
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY yarn.lock ./
+COPY package.json .
+COPY yarn.lock .
 
-RUN yarn
+RUN yarn install --pure-lockfile --non-interactive
 
-COPY src/ ./src
-COPY tsconfig.json ./
+copy . ./
 
 EXPOSE 4000
 
