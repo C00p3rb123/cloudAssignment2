@@ -4,7 +4,7 @@ import { ShowAccountModal } from "./ShowAccountModal";
 import { AddAccountModal } from "./AddAccountModal";
 import { API_URL } from "../config";
 
-const AccountPage: React.FC = () => {
+export const AccountPage: React.FC = () => {
   const [accounts, setAccounts] = useState<string[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<string>();
   const [isAccountModalOpen, setIsAccountModalOpen] = useState<boolean>(false);
@@ -44,42 +44,42 @@ const AccountPage: React.FC = () => {
           fetchAccounts();
         }}
       />
-      <div className="bg-gray-100 min-h-screen">
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
-            <ul className="mt-4">
-              {accounts?.map((account) => (
-                <li
-                  key={account}
-                  className="bg-white shadow overflow-hidden sm:rounded-md mb-4"
-                >
+      <div className="bg-[#000e23] min-h-screen flex justify-center items-center">
+        <div className="bg-gray-100 rounded-2xl flex-1 max-w-xl">
+          <div className="mx-auto py-6 px-10">
+            <div className="px-4 py-6">
+              <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
+              <ul className="mt-4">
+                {accounts?.map((account) => (
+                  <li
+                    key={account}
+                    className="bg-white shadow overflow-hidden rounded-md mb-4"
+                  >
+                    <div
+                      className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
+                      onClick={() => handleClickAccount(account)}
+                    >
+                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                        {account}
+                      </h3>
+                    </div>
+                  </li>
+                ))}
+                <li className="bg-white shadow overflow-hidden rounded-md mb-4">
                   <div
                     className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
-                    onClick={() => handleClickAccount(account)}
+                    onClick={() => handleClickAdd()}
                   >
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      {account}
+                    <h3 className="text-lg leading-6 font-medium text-gray-400">
+                      ➕<span className="ml-4">Add new account</span>
                     </h3>
                   </div>
                 </li>
-              ))}
-              <li className="bg-white shadow overflow-hidden sm:rounded-md mb-4">
-                <div
-                  className="px-4 py-5 sm:px-6 hover:bg-slate-200 hover:cursor-pointer"
-                  onClick={() => handleClickAdd()}
-                >
-                  <h3 className="text-lg leading-6 font-medium text-gray-400">
-                    ➕ Add new account
-                  </h3>
-                </div>
-              </li>
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </>
   );
 };
-
-export default AccountPage;
