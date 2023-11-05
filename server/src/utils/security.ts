@@ -6,7 +6,7 @@ export const hashPassword = async (password: string) => {
   const startTime = new Date().getTime();
   const hashedPassword = await argon2.hash(password, {
     timeCost: 18,
-    memoryCost: 500000,
+    memoryCost: 65536,
   });
 
   const endTime = new Date().getTime();
