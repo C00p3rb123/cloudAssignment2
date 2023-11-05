@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { API_URL } from "../config";
 import LoadingOverlay from "react-loading-overlay-ts";
 import toast from "react-hot-toast";
+import { handleAxiosError } from "../utils/handleAxiosError";
 
 type Props = {
   isOpen: boolean;
@@ -29,9 +30,7 @@ export const AddAccountModal = ({ isOpen, onClose }: Props) => {
       onClose();
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message, {
-          position: "top-right",
-        });
+        handleAxiosError(error);
       }
       console.error(error);
     }

@@ -35,11 +35,11 @@ router.post("/create-account", async (req: Request, res: Response) => {
     console.log(`${err.message}\nUnable to hash password`);
     res.status(400).json({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
     console.log({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
   }
 });
@@ -79,7 +79,7 @@ router.post("/login", async (req: Request, res: Response) => {
     console.log(`${err.message}\nUnable to hash password`);
     res.status(400).json({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
   }
 });

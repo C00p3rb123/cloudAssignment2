@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 import LoadingOverlay from "react-loading-overlay-ts";
 import toast from "react-hot-toast";
+import { handleAxiosError } from "../utils/handleAxiosError";
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,9 +37,7 @@ export const LoginPage = () => {
       navigate("/account", { replace: true });
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message, {
-          position: "top-right",
-        });
+        handleAxiosError(error);
       }
       console.error(error);
     }
@@ -58,9 +57,7 @@ export const LoginPage = () => {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message, {
-          position: "top-right",
-        });
+        handleAxiosError(error);
       }
       console.error(error);
     }

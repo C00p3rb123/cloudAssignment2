@@ -41,7 +41,7 @@ router.get("/list", async (req, res) => {
     console.log(`${err.message}`);
     res.status(400).json({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
   }
 });
@@ -64,7 +64,7 @@ router.get("/:platform", async (req, res) => {
     if (requestedPlatform.length === 0) {
       return res.status(400).json({
         error: true,
-        Message: "Platform not found",
+        message: "Platform not found",
       });
     }
     const returnedPlatform: ServiceRequest = {
@@ -77,7 +77,7 @@ router.get("/:platform", async (req, res) => {
     console.log(`${err.message}`);
     res.status(400).json({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
   }
 });
@@ -109,13 +109,13 @@ router.post("/add-service", async (req, res) => {
       userServices.map((s) => s.platform)
     );
     res.status(200).json({
-      Message: `Successfully stored service: ${service.platform} with user: ${service.username}`,
+      message: `Successfully stored service: ${service.platform} with user: ${service.username}`,
     });
   } catch (err) {
     console.log(`${err.message}`);
     res.status(400).json({
       error: err,
-      Message: err.message,
+      message: err.message,
     });
   }
 });
