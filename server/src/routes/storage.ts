@@ -52,7 +52,7 @@ router.get("/:platform", async (req, res) => {
     const key = `user:${userEmail}:services:${platform}`;
     const cachedCredential = await getRedis(key);
     if (cachedCredential) {
-      return res.status(200).json(cachedCredential);
+      return res.status(200).json(cachedCredential.value);
     }
     const userMasterFile = await getS3(userEmail);
     const credentials: ServiceStored[] = userMasterFile.value.services;

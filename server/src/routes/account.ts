@@ -34,10 +34,6 @@ router.post("/create-account", async (req: Request, res: Response) => {
       error: err,
       message: err.message,
     });
-    console.log({
-      error: err,
-      message: err.message,
-    });
   }
 });
 

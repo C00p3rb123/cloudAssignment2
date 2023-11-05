@@ -1,5 +1,4 @@
 import * as redis from "redis";
-import dotenv from "dotenv"
 const redisOptions = {
   socket: {
     host: process.env.REDIS_URL,
