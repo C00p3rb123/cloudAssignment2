@@ -1,3 +1,3 @@
 docker build --push -t pondpiu/password .
 
-docker run --name server -p 4000:4000 --env-file .env -i -t -d pondpiu/password
+docker run --name server -p 4000:4000 --env-file .env -dit --restart unless-stopped pondpiu/password
