@@ -45,7 +45,7 @@ router.post("/login", async (req: Request, res: Response) => {
     let masterPasswordHash: string;
     const cachedCredential = await getRedis(key);
     if (cachedCredential) {
-      masterPasswordHash = cachedCredential.value;
+      masterPasswordHash = cachedCredential;
     } else {
       const user = await getS3(email);
       if (!user) {

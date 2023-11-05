@@ -10,11 +10,7 @@ const redisClient = redis.createClient(redisOptions);
 export const initClient = async () => redisClient.connect();
 
 export const setRedis = async (key: string, value: any) => {
-  redisClient.setEx(
-    key,
-    3600,
-    JSON.stringify({ source: "Redis Cache", value })
-  );
+  redisClient.setEx(key, 3600, JSON.stringify(value));
 };
 
 export const getRedis = async (key: string) => {
