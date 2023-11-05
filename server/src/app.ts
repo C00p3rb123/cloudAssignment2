@@ -1,5 +1,5 @@
 import express from "express";
-import reisgterRouter from "../src/routes/account";
+import accountRouter from "../src/routes/account";
 import storageRouter from "../src/routes/storage";
 import dotenv from "dotenv";
 import logger from "morgan";
@@ -20,7 +20,7 @@ app.get("/hello", (req, res) => {
   return res.send("hi");
 });
 
-app.use("/account", reisgterRouter);
+app.use("/account", accountRouter);
 app.use("/storage", storageRouter);
 
 app.listen(PORT, async () => {
