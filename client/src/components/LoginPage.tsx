@@ -4,6 +4,7 @@ import { useAuth } from "../provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 import LoadingOverlay from "react-loading-overlay-ts";
+import toast from "react-hot-toast";
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +36,9 @@ export const LoginPage = () => {
       navigate("/account", { replace: true });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.message);
+        toast.error(error.message, {
+          position: "top-right",
+        });
       }
       console.error(error);
     }
@@ -46,14 +49,18 @@ export const LoginPage = () => {
     setLoadingText("Registering...");
     setIsLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/account/create-account`, {
+      await axios.post(`${API_URL}/account/create-account`, {
         email,
         password,
       });
-      alert(response.data.message);
+      toast.success("Account created successfully!", {
+        position: "top-right",
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(error.message);
+        toast.error(error.message, {
+          position: "top-right",
+        });
       }
       console.error(error);
     }
