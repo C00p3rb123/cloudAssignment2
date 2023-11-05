@@ -62,11 +62,10 @@ router.get("/:platform", async (req, res) => {
       (service) => service.platform === platform
     );
     if (requestedPlatform.length === 0) {
-      res.status(400).json({
+      return res.status(400).json({
         error: true,
         Message: "Platform not found",
       });
-      return;
     }
     const returnedPlatform: ServiceRequest = {
       ...requestedPlatform[0],

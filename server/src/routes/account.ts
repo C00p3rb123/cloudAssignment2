@@ -56,24 +56,20 @@ router.post("/login", async (req: Request, res: Response) => {
     } else {
       const user = await getS3(email);
       if (!user) {
-        res.status(400);
-        res.send({
+        return res.status(400).json({
           error: true,
           message: "Account does not exist",
         });
-        return;
       }
       masterPasswordHash = user.value.masterPassword;
-      await setRedis(key, { value: masterPasswordHash });
+      await setRedis(key, masterPasswordHash);
     }
     const verified = await verifyPassword(password, masterPasswordHash);
     if (!verified) {
-      res.status(400);
-      res.send({
+      return res.status(400).json({
         error: true,
         message: "Password does not match",
       });
-      return;
     }
     const token = await createToken({ email: email });
     res.setHeader("Authorization", `Bearer ${token}`);
