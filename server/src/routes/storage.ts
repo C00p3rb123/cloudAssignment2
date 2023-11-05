@@ -29,17 +29,16 @@ router.get("/list", async (req, res) => {
     const key = `user:${userEmail}:services`;
     const cachedServiceList = await getRedis(key);
     if (cachedServiceList) {
-      res.status(200).json(cachedServiceList);
-      return;
+      return res.status(200).json(cachedServiceList);
     }
     const userMasterFile = await getS3(userEmail);
     const credentials: ServiceStored[] = userMasterFile.value.services;
     const serviceList = credentials.map((c) => c.platform);
     await setRedis(key, serviceList);
-    res.status(200).json(serviceList);
+    return res.status(200).json(serviceList);
   } catch (err) {
     console.log(`${err.message}`);
-    res.status(400).json({
+    return res.status(400).json({
       error: err,
       message: err.message,
     });
@@ -53,8 +52,7 @@ router.get("/:platform", async (req, res) => {
     const key = `user:${userEmail}:services:${platform}`;
     const cachedCredential = await getRedis(key);
     if (cachedCredential) {
-      res.status(200).json(cachedCredential);
-      return;
+      return res.status(200).json(cachedCredential);
     }
     const userMasterFile = await getS3(userEmail);
     const credentials: ServiceStored[] = userMasterFile.value.services;
@@ -72,10 +70,10 @@ router.get("/:platform", async (req, res) => {
       password: decryptPassword(requestedPlatform[0].password),
     };
     await setRedis(key, returnedPlatform);
-    res.status(200).json(returnedPlatform);
+    return res.status(200).json(returnedPlatform);
   } catch (err) {
     console.log(`${err.message}`);
-    res.status(400).json({
+    return res.status(400).json({
       error: err,
       message: err.message,
     });
@@ -108,12 +106,12 @@ router.post("/add-service", async (req, res) => {
       key,
       userServices.map((s) => s.platform)
     );
-    res.status(200).json({
+    return res.status(200).json({
       message: `Successfully stored service: ${service.platform} with user: ${service.username}`,
     });
   } catch (err) {
     console.log(`${err.message}`);
-    res.status(400).json({
+    return res.status(400).json({
       error: err,
       message: err.message,
     });

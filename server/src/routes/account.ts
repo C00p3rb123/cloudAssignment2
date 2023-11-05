@@ -16,24 +16,21 @@ router.post("/create-account", async (req: Request, res: Response) => {
     const hashedPassword = await hashPassword(password);
     const isEmail = await getS3(email);
     if (isEmail) {
-      res.status(400);
-      res.send({
+      return res.status(400).json({
         error: true,
         message: "Account already exists",
       });
-      return;
     }
     await setS3(email, {
       masterPassword: hashedPassword,
       services: [],
     });
-    res.status(200);
-    res.send({
+    return res.status(200).json({
       message: `Successfully created account`,
     });
   } catch (err: any) {
     console.log(`${err.message}\nUnable to hash password`);
-    res.status(400).json({
+    return res.status(400).json({
       error: err,
       message: err.message,
     });
@@ -73,11 +70,10 @@ router.post("/login", async (req: Request, res: Response) => {
     }
     const token = await createToken({ email: email });
     res.setHeader("Authorization", `Bearer ${token}`);
-    res.status(200);
-    res.json({ token });
+    return res.status(200).json({ token });
   } catch (err: any) {
     console.log(`${err.message}\nUnable to hash password`);
-    res.status(400).json({
+    return res.status(400).json({
       error: err,
       message: err.message,
     });
