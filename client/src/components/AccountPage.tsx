@@ -16,7 +16,7 @@ export const AccountPage: React.FC = () => {
   const fetchAccounts = async () => {
     const response = await axios.get(`${API_URL}/storage/list`);
     console.log({ response });
-    const accounts = response?.data?.value;
+    const accounts = response?.data;
     if (!accounts) {
       return;
     }
