@@ -1,8 +1,8 @@
 import * as redis from "redis";
-
+import dotenv from "dotenv"
 const redisOptions = {
   socket: {
-    host: "group41redis.km2jzi.clustercfg.apse2.cache.amazonaws.com",
+    host: process.env.dotenv,
     port: 6379,
   },
 };
