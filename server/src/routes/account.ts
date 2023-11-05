@@ -51,8 +51,10 @@ router.post("/login", async (req: Request, res: Response) => {
     const key = `user:${email}:masterPasswordHash`;
     let masterPasswordHash: string;
     const cachedCredential = await getRedis(key);
+    console.log({ cachedCredential });
     if (cachedCredential) {
       masterPasswordHash = cachedCredential.value;
+      console.log({ case: "cached", masterPasswordHash });
     } else {
       const user = await getS3(email);
       if (!user) {
@@ -61,9 +63,11 @@ router.post("/login", async (req: Request, res: Response) => {
           message: "Account does not exist",
         });
       }
+      console.log({ user });
       masterPasswordHash = user.value.masterPassword;
       await setRedis(key, masterPasswordHash);
     }
+    console.log({ masterPasswordHash });
     const verified = await verifyPassword(password, masterPasswordHash);
     if (!verified) {
       return res.status(400).json({
