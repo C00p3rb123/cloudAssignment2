@@ -2,7 +2,7 @@ import * as redis from "redis";
 import dotenv from "dotenv"
 const redisOptions = {
   socket: {
-    host: process.env.dotenv,
+    host: process.env.REDIS_URL,
     port: 6379,
   },
 };
