@@ -50,26 +50,29 @@ router.get("/:platform", async (req, res) => {
     const platform = req.params.platform;
     const userEmail = req["user"]?.email;
     const key = `user:${userEmail}:services:${platform}`;
+    let platformCredential;
     const cachedCredential = await getRedis(key);
     if (cachedCredential) {
-      return res.status(200).json(cachedCredential);
-    }
-    const userMasterFile = await getS3(userEmail);
-    const credentials: ServiceStored[] = userMasterFile.value.services;
-    const requestedPlatform: ServiceStored[] = credentials.filter(
-      (service) => service.platform === platform
-    );
-    if (requestedPlatform.length === 0) {
-      return res.status(400).json({
-        error: true,
-        message: "Platform not found",
-      });
+      platformCredential = cachedCredential;
+    } else {
+      const userMasterFile = await getS3(userEmail);
+      const credentials: ServiceStored[] = userMasterFile.value.services;
+      const requestedPlatform: ServiceStored[] = credentials.filter(
+        (service) => service.platform === platform
+      );
+      if (requestedPlatform.length === 0) {
+        return res.status(400).json({
+          error: true,
+          message: "Platform not found",
+        });
+      }
+      await setRedis(key, requestedPlatform);
+      platformCredential = requestedPlatform;
     }
     const returnedPlatform: ServiceRequest = {
-      ...requestedPlatform[0],
-      password: decryptPassword(requestedPlatform[0].password),
+      ...platformCredential[0],
+      password: decryptPassword(platformCredential[0].password),
     };
-    await setRedis(key, returnedPlatform);
     return res.status(200).json(returnedPlatform);
   } catch (err) {
     console.log(`${err.message}`);
